@@ -51,21 +51,19 @@ jobs:
         tags: saranjsr07/my-app:latest
         push: false
         
-    - name: Debug cnspec Providers
-      run: |
-        cnspec providers list
+    #- name: Cnspec login
+    #  run: |
+    #    cnspec login --token ${{ secrets.MONDOO_CONFIG_BASE64 }} 
 
-
-    - name: Create cnspec Policy
-      run: |
-        echo 'dockerfile.file("/root/my-app-linux").exists should be true' > container-policy.mql
-        echo 'dockerfile.expose should contain 8080' >> container-policy.mql
-        cat container-policy.mql
+    #- name: Create cnspec Policy
+    #  run: |
+    #    echo 'dockerfile.file("/root/my-app-linux").exists should be true' > container-policy.mql
+    #    echo 'dockerfile.expose should contain 8080' >> container-policy.mql
+    #    cat container-policy.mql
     
     - name: Run cnspec Tests on Docker Image
       run: |
-        cnspec scan docker file . --policy-bundle policy.mql.yaml --incognito || exit 1
-
+        cnspec scan docker . --policy-bundle policy.mql.yaml --incognito --verbose || exit 1
 
     - name: Login to DockerHub
       uses: docker/login-action@v3
