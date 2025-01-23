@@ -1,0 +1,30 @@
+apiVersion: mondoo.io/v1
+kind: PolicyBundle
+metadata:
+  name: custom-dockerfile-policy
+  version: 1.0.0
+spec:
+  policies:
+    - name: Dockerfile Compliance
+      description: Ensure the Dockerfile adheres to specified best practices
+      groups:
+        - title: Binary and Port Checks
+          queries:
+            - uid: check-binary-existence
+              title: Verify Binary Exists at /root/my-app-linux
+              mql: |
+                dockerfile.file("/root/my-app-linux").exists
+              assertion: should be true
+              impact: 70
+              tags:
+                - dockerfile
+                - binary
+            - uid: check-exposed-port
+              title: Ensure Dockerfile Exposes Port 8080
+              mql: |
+                dockerfile.expose
+              assertion: should contain 8080
+              impact: 50
+              tags:
+                - dockerfile
+                - port
